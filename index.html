@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSC DEO Master Prep — My Study Command</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0c10;
+  --bg2: #111318;
+  --bg3: #181b22;
+  --bg4: #1e2229;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #f0f0ee;
+  --text2: #9a9a94;
+  --text3: #5a5a56;
+  --accent: #e8d5a0;
+  --accent2: #c4a96e;
+  --green: #4ade80;
+  --green2: #166534;
+  --green3: #052e16;
+  --blue: #60a5fa;
+  --blue2: #1d4ed8;
+  --orange: #fb923c;
+  --orange2: #9a3412;
+  --purple: #a78bfa;
+  --red: #f87171;
+  --teal: #2dd4bf;
+  --font-head: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --r: 12px;
+  --r2: 8px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* NOISE TEXTURE */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* LAYOUT */
+.shell { display: flex; min-height: 100vh; position: relative; z-index: 1; }
+
+/* SIDEBAR */
+.sidebar {
+  width: 220px;
+  min-height: 100vh;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 100;
+  transition: transform .3s;
+}
+.sidebar-logo {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-logo h1 {
+  font-family: var(--font-head);
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -.02em;
+  line-height: 1.2;
+}
+.sidebar-logo p {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 2px;
+  font-family: var(--font-mono);
+}
+.nav { padding: 12px 10px; flex: 1; }
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--r2);
+  cursor: pointer;
+  color: var(--text2);
+  font-size: 13px;
+  font-weight: 400;
+  transition: all .15s;
+  margin-bottom: 2px;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+.nav-item:hover { background: var(--bg3); color: var(--text); }
+.nav-item.active { background: var(--bg4); color: var(--accent); font-weight: 500; }
+.nav-item .icon { width: 16px; text-align: center; font-size: 14px; }
+.sidebar-bottom {
+  padding: 16px;
+  border-top: 1px solid var(--border);
+}
+.streak-pill {
+  background: linear-gradient(135deg, #1a1200, #2d2000);
+  border: 1px solid rgba(232,213,160,0.2);
+  border-radius: 20px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.streak-pill .fire { font-size: 18px; }
+.streak-pill .num {
+  font-family: var(--font-head);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+}
+.streak-pill .lbl { font-size: 10px; color: var(--text3); line-height: 1.2; }
+
+/* MAIN */
+.main {
+  margin-left: 220px;
+  flex: 1;
+  min-height: 100vh;
+  padding: 32px 28px;
+  max-width: calc(100vw - 220px);
+}
+
+/* TOP BAR */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.page-title {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -.03em;
+}
+.date-chip {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: var(--text2);
+  font-family: var(--font-mono);
+}
+
+/* PAGES */
+.page { display: none; }
+.page.active { display: block; }
+
+/* CARDS */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.card-title {
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--text3);
+  margin-bottom: 14px;
+}
+
+/* GRID */
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+
+/* STAT MINI CARDS */
+.stat-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px;
+  text-align: center;
+}
+.stat-num {
+  font-family: var(--font-head);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-lbl { font-size: 11px; color: var(--text3); }
+
+/* CHECKLIST */
+.task-group { margin-bottom: 20px; }
+.task-group-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--text3);
+  margin-bottom: 8px;
+  padding-left: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.task-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--r2);
+  margin-bottom: 4px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all .15s;
+  background: var(--bg3);
+}
+.task-item:hover { border-color: var(--border2); }
+.task-item.done { opacity: 0.5; }
+.task-item.done .task-text { text-decoration: line-through; color: var(--text3); }
+.checkbox {
+  width: 18px; height: 18px;
+  border-radius: 5px;
+  border: 1.5px solid var(--border2);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .15s;
+  background: transparent;
+}
+.task-item.done .checkbox {
+  background: var(--green);
+  border-color: var(--green);
+}
+.check-icon { font-size: 11px; display: none; }
+.task-item.done .check-icon { display: block; }
+.task-text { font-size: 13px; flex: 1; }
+.task-time {
+  font-size: 11px;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+.task-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* PROGRESS BAR */
+.prog-wrap { margin-bottom: 12px; }
+.prog-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+.prog-label span:first-child { color: var(--text2); }
+.prog-label span:last-child { color: var(--text3); font-family: var(--font-mono); }
+.prog-track {
+  height: 5px;
+  background: var(--bg4);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.prog-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width .6s cubic-bezier(.25,.46,.45,.94);
+}
+
+/* WEEK CALENDAR */
+.week-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.day-chip {
+  flex: 1;
+  min-width: 36px;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all .15s;
+  background: var(--bg3);
+  position: relative;
+}
+.day-chip:hover { border-color: var(--border2); }
+.day-chip.today { border-color: var(--accent2); }
+.day-chip.complete { background: var(--green3); border-color: var(--green2); }
+.day-chip.partial { background: #1c1a00; border-color: #3d3500; }
+.day-chip .day-num {
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}
+.day-chip .day-name { font-size: 8px; color: var(--text3); margin-top: 1px; }
+.day-chip.today .day-num { color: var(--accent); }
+
+/* INPUT */
+input[type=number], input[type=text], select {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--r2);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 13px;
+  padding: 8px 12px;
+  width: 100%;
+  outline: none;
+  transition: border-color .15s;
+}
+input:focus, select:focus { border-color: var(--accent2); }
+label { font-size: 12px; color: var(--text2); margin-bottom: 4px; display: block; }
+
+/* BUTTON */
+.btn {
+  background: var(--accent);
+  color: #0a0c10;
+  border: none;
+  border-radius: var(--r2);
+  padding: 9px 18px;
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .15s;
+  letter-spacing: .02em;
+}
+.btn:hover { background: var(--accent2); transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn-ghost {
+  background: transparent;
+  color: var(--text2);
+  border: 1px solid var(--border2);
+}
+.btn-ghost:hover { background: var(--bg3); color: var(--text); }
+
+/* SCORE LOG */
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.score-row:last-child { border-bottom: none; }
+.score-date { color: var(--text3); font-family: var(--font-mono); font-size: 11px; min-width: 80px; }
+.score-val {
+  font-family: var(--font-head);
+  font-size: 16px;
+  font-weight: 700;
+  min-width: 50px;
+}
+.score-bar { flex: 1; height: 4px; background: var(--bg4); border-radius: 2px; overflow: hidden; }
+.score-bar-fill { height: 100%; border-radius: 2px; }
+
+/* TYPING LOG */
+.typing-entry {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.typing-entry:last-child { border-bottom: none; }
+.wpm-big {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 800;
+  min-width: 52px;
+}
+
+/* WEEK SCHEDULE TABLE */
+.sched-table { width: 100%; border-collapse: collapse; }
+.sched-table th {
+  text-align: left;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--text3);
+  border-bottom: 1px solid var(--border);
+}
+.sched-table td {
+  padding: 9px 12px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.sched-table tr:last-child td { border-bottom: none; }
+.sched-table tr:hover td { background: var(--bg3); }
+
+/* TOPIC PILL */
+.pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  margin: 2px;
+}
+.pill-green { background: var(--green3); color: var(--green); border: 1px solid var(--green2); }
+.pill-blue { background: #0c1a3d; color: var(--blue); border: 1px solid #1d4ed8; }
+.pill-amber { background: #1a0e00; color: #fbbf24; border: 1px solid #92400e; }
+.pill-purple { background: #160d2e; color: var(--purple); border: 1px solid #4c1d95; }
+.pill-teal { background: #012e2a; color: var(--teal); border: 1px solid #0f766e; }
+.pill-red { background: #1f0707; color: var(--red); border: 1px solid #7f1d1d; }
+
+/* DIVIDER */
+.divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--bg4);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  padding: 12px 18px;
+  font-size: 13px;
+  color: var(--text);
+  z-index: 999;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all .3s;
+  max-width: 300px;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* MOBILE MENU */
+.menu-btn {
+  display: none;
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 200;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 16px;
+}
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 99; }
+
+/* SECTION HEADER */
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.section-title {
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* INLINE FORM ROW */
+.form-row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+.form-field { flex: 1; min-width: 120px; }
+
+/* WEEK PHASE INDICATOR */
+.phase-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.phase-seg {
+  flex: 1;
+  min-width: 60px;
+  padding: 10px 8px;
+  border-radius: var(--r2);
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  font-size: 11px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .15s;
+}
+.phase-seg.current { border-color: var(--accent2); background: #1a1200; }
+.phase-seg-label { font-weight: 600; color: var(--text2); }
+.phase-seg.current .phase-seg-label { color: var(--accent); }
+.phase-seg-weeks { color: var(--text3); font-size: 10px; margin-top: 2px; }
+
+/* SCROLL */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 2px; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; padding: 70px 16px 24px; max-width: 100vw; }
+  .menu-btn { display: flex; align-items: center; justify-content: center; }
+  .overlay.show { display: block; }
+  .grid2, .grid3, .grid4 { grid-template-columns: 1fr 1fr; }
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(12px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+.page.active .card { animation: fadeUp .3s ease both; }
+.page.active .card:nth-child(2) { animation-delay: .05s; }
+.page.active .card:nth-child(3) { animation-delay: .1s; }
+.page.active .card:nth-child(4) { animation-delay: .15s; }
+</style>
+</head>
+<body>
+
+<button class="menu-btn" onclick="toggleMenu()">☰</button>
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<div class="shell">
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <h1>SSC DEO<br>Command</h1>
+    <p>Your prep tracker</p>
+  </div>
+  <nav class="nav">
+    <button class="nav-item active" onclick="goTo('today',this)"><span class="icon">📅</span> Today</button>
+    <button class="nav-item" onclick="goTo('calendar',this)"><span class="icon">🗓</span> Calendar</button>
+    <button class="nav-item" onclick="goTo('syllabus',this)"><span class="icon">📚</span> Syllabus</button>
+    <button class="nav-item" onclick="goTo('schedule',this)"><span class="icon">⏰</span> Schedule</button>
+    <button class="nav-item" onclick="goTo('typing',this)"><span class="icon">⌨️</span> Typing Log</button>
+    <button class="nav-item" onclick="goTo('mocks',this)"><span class="icon">📝</span> Mock Scores</button>
+    <button class="nav-item" onclick="goTo('progress',this)"><span class="icon">📊</span> Progress</button>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="streak-pill">
+      <span class="fire">🔥</span>
+      <div>
+        <div class="num" id="streak-num">0</div>
+        <div class="lbl">day streak</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- ===== TODAY PAGE ===== -->
+<div class="page active" id="page-today">
+  <div class="topbar">
+    <div class="page-title">Today's Mission</div>
+    <div class="date-chip" id="today-date">—</div>
+  </div>
+
+  <!-- Today's progress -->
+  <div class="grid4" style="margin-bottom:16px">
+    <div class="stat-card">
+      <div class="stat-num" id="today-done" style="color:var(--green)">0</div>
+      <div class="stat-lbl">Tasks Done</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="today-total" style="color:var(--text2)">0</div>
+      <div class="stat-lbl">Total Tasks</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="today-pct" style="color:var(--accent)">0%</div>
+      <div class="stat-lbl">Complete</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="today-type" style="color:var(--teal)">—</div>
+      <div class="stat-lbl">Day Type</div>
+    </div>
+  </div>
+
+  <div id="checklist-container"></div>
+</div>
+
+<!-- ===== CALENDAR PAGE ===== -->
+<div class="page" id="page-calendar">
+  <div class="topbar">
+    <div class="page-title">Study Calendar</div>
+    <div class="date-chip" id="cal-month">—</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">This Month</div>
+    <div id="month-cal"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">16-Week Journey</div>
+    <div class="phase-bar" id="phase-bar"></div>
+    <div id="week-detail" style="font-size:13px;color:var(--text2)">Click a phase to see details.</div>
+  </div>
+</div>
+
+<!-- ===== SYLLABUS PAGE ===== -->
+<div class="page" id="page-syllabus">
+  <div class="topbar">
+    <div class="page-title">Complete Syllabus</div>
+  </div>
+
+  <div id="syllabus-container"></div>
+</div>
+
+<!-- ===== SCHEDULE PAGE ===== -->
+<div class="page" id="page-schedule">
+  <div class="topbar">
+    <div class="page-title">Daily Schedule</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Weekday Schedule (Mon–Fri)</div>
+    <table class="sched-table">
+      <thead><tr><th>Time</th><th>Activity</th><th>Duration</th><th>Subject</th></tr></thead>
+      <tbody>
+        <tr><td>5:00 AM</td><td>Wake up, freshen up</td><td>15 min</td><td>—</td></tr>
+        <tr><td>5:15 AM</td><td>🏋️ Home Workout / Calisthenics</td><td>1h 15min</td><td><span class="pill pill-teal">Fitness</span></td></tr>
+        <tr><td>6:30 AM</td><td>⌨️ Typing Practice</td><td>30 min</td><td><span class="pill pill-blue">Skill Test</span></td></tr>
+        <tr><td>7:00 AM</td><td>📐 Maths Practice</td><td>1 hour</td><td><span class="pill pill-amber">Maths</span></td></tr>
+        <tr><td>8:00 AM</td><td>📰 Current Affairs</td><td>30 min</td><td><span class="pill pill-green">GK</span></td></tr>
+        <tr><td>8:30 AM</td><td>🧠 Reasoning</td><td>1 hour</td><td><span class="pill pill-purple">Reasoning</span></td></tr>
+        <tr><td>9:30 AM</td><td>Get ready + breakfast + commute</td><td>30 min</td><td>—</td></tr>
+        <tr><td>10:00 AM</td><td>💼 Internship</td><td>7 hours</td><td>—</td></tr>
+        <tr><td>6:00 PM</td><td>📖 English</td><td>1 hour</td><td><span class="pill pill-blue">English</span></td></tr>
+        <tr><td>7:00 PM</td><td>📚 General Awareness</td><td>1 hour</td><td><span class="pill pill-green">GK</span></td></tr>
+        <tr><td>8:00 PM</td><td>✏️ 20 Practice Questions</td><td>30 min</td><td><span class="pill pill-purple">Mixed</span></td></tr>
+        <tr><td>8:30 PM</td><td>✅ Done for today</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Weekend Schedule (Sat & Sun — 6 Hours)</div>
+    <table class="sched-table">
+      <thead><tr><th>Time</th><th>Activity</th><th>Duration</th><th>Subject</th></tr></thead>
+      <tbody>
+        <tr><td>5:15 AM</td><td>🏋️ Home Workout</td><td>1h 15min</td><td><span class="pill pill-teal">Fitness</span></td></tr>
+        <tr><td>7:00 AM</td><td>⌨️ Typing Practice</td><td>30 min</td><td><span class="pill pill-blue">Skill Test</span></td></tr>
+        <tr><td>7:30 AM</td><td>📐 Maths Deep Practice (2 topics)</td><td>2 hours</td><td><span class="pill pill-amber">Maths</span></td></tr>
+        <tr><td>9:30 AM</td><td>🧠 Reasoning (1 topic + 30 Qs)</td><td>1.5 hours</td><td><span class="pill pill-purple">Reasoning</span></td></tr>
+        <tr><td>3:00 PM</td><td>📝 Full Mock Test</td><td>2 hours</td><td><span class="pill pill-red">Mock</span></td></tr>
+        <tr><td>5:00 PM</td><td>🔍 Mock Analysis + Revision</td><td>1 hour</td><td><span class="pill pill-green">Revision</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== TYPING PAGE ===== -->
+<div class="page" id="page-typing">
+  <div class="topbar">
+    <div class="page-title">Typing Speed Log</div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Log Today's Speed</div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>WPM (Words Per Minute)</label>
+          <input type="number" id="wpm-input" min="1" max="150" placeholder="e.g. 28">
+        </div>
+        <div class="form-field">
+          <label>Accuracy %</label>
+          <input type="number" id="acc-input" min="1" max="100" placeholder="e.g. 95">
+        </div>
+      </div>
+      <br>
+      <button class="btn" onclick="saveTyping()">Save Entry</button>
+      <p style="font-size:11px;color:var(--text3);margin-top:8px">Target: 35+ WPM (8000 key/hr) with 95%+ accuracy</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Current Stats</div>
+      <div class="grid2" style="gap:10px">
+        <div class="stat-card">
+          <div class="stat-num" id="best-wpm" style="color:var(--teal)">—</div>
+          <div class="stat-lbl">Best WPM</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="avg-wpm" style="color:var(--accent)">—</div>
+          <div class="stat-lbl">Avg WPM</div>
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="prog-wrap">
+          <div class="prog-label"><span>Progress to Target (35 WPM)</span><span id="wpm-prog-pct">0%</span></div>
+          <div class="prog-track"><div class="prog-fill" id="wpm-prog-bar" style="background:var(--teal);width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-head">
+      <div class="section-title">History</div>
+    </div>
+    <div id="typing-log-list"><p style="color:var(--text3);font-size:13px">No entries yet. Start logging!</p></div>
+  </div>
+</div>
+
+<!-- ===== MOCKS PAGE ===== -->
+<div class="page" id="page-mocks">
+  <div class="topbar">
+    <div class="page-title">Mock Test Scores</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Add Mock Score</div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Mock Test #</label>
+        <input type="number" id="mock-num" min="1" placeholder="1">
+      </div>
+      <div class="form-field">
+        <label>Score (out of 100)</label>
+        <input type="number" id="mock-score" min="0" max="100" placeholder="72">
+      </div>
+      <div class="form-field">
+        <label>Maths /25</label>
+        <input type="number" id="mock-math" min="0" max="25" placeholder="18">
+      </div>
+      <div class="form-field">
+        <label>Reasoning /25</label>
+        <input type="number" id="mock-reason" min="0" max="25" placeholder="20">
+      </div>
+      <div class="form-field">
+        <label>English /25</label>
+        <input type="number" id="mock-eng" min="0" max="25" placeholder="19">
+      </div>
+      <div class="form-field">
+        <label>GK /25</label>
+        <input type="number" id="mock-gk" min="0" max="25" placeholder="15">
+      </div>
+    </div>
+    <br>
+    <button class="btn" onclick="saveMock()">Save Score</button>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Overall Stats</div>
+      <div class="grid2" style="gap:10px">
+        <div class="stat-card">
+          <div class="stat-num" id="best-mock" style="color:var(--green)">—</div>
+          <div class="stat-lbl">Best Score</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="avg-mock" style="color:var(--accent)">—</div>
+          <div class="stat-lbl">Average</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Subject Averages</div>
+      <div id="subj-avgs"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-head"><div class="section-title">Score History</div></div>
+    <div id="mock-log-list"><p style="color:var(--text3);font-size:13px">No mock scores yet.</p></div>
+  </div>
+</div>
+
+<!-- ===== PROGRESS PAGE ===== -->
+<div class="page" id="page-progress">
+  <div class="topbar">
+    <div class="page-title">Overall Progress</div>
+  </div>
+
+  <div class="grid4" style="margin-bottom:16px">
+    <div class="stat-card">
+      <div class="stat-num" id="p-days" style="color:var(--green)">0</div>
+      <div class="stat-lbl">Days Studied</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="p-tasks" style="color:var(--blue)">0</div>
+      <div class="stat-lbl">Tasks Done</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="p-mocks" style="color:var(--purple)">0</div>
+      <div class="stat-lbl">Mocks Given</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="p-streak" style="color:var(--accent)">0</div>
+      <div class="stat-lbl">Best Streak</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Subject Progress</div>
+    <div id="subj-progress"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Syllabus Completion</div>
+    <div id="syllabus-progress"></div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const WEEKS = [
+  { phase:'Foundation', weeks:'1–4', color:'#378ADD',
+    topics:{maths:'Number System, LCM/HCF, Percentage, Profit & Loss', reasoning:'Analogies, Series, Coding-Decoding', english:'Synonyms/Antonyms, Fill in Blanks, Spelling', gk:'Ancient History, Medieval History'}},
+  { phase:'Foundation', weeks:'1–4', color:'#378ADD',
+    topics:{maths:'SI & CI, Ratio & Proportion', reasoning:'Blood Relations, Directions', english:'Error Detection, Reading Comprehension', gk:'Modern History, Indian Polity Part 1'}},
+  { phase:'Intermediate', weeks:'5–8', color:'#1D9E75',
+    topics:{maths:'Time Speed Distance, Time & Work, Pipes', reasoning:'Seating Arrangement, Syllogism', english:'Idioms & Phrases, One Word Sub', gk:'Indian Polity Part 2, Indian Geography'}},
+  { phase:'Intermediate', weeks:'5–8', color:'#1D9E75',
+    topics:{maths:'Algebra, Geometry Basics', reasoning:'Puzzles, Venn Diagrams, Matrix', english:'Active/Passive, Direct/Indirect Speech', gk:'World Geography, Indian Economy'}},
+  { phase:'Advanced', weeks:'9–12', color:'#BA7517',
+    topics:{maths:'Mensuration, Trigonometry', reasoning:'Mixed Reasoning PYQs', english:'Para Jumbles, Full English Revision', gk:'Banking & Finance, Science - Physics'}},
+  { phase:'Advanced', weeks:'9–12', color:'#BA7517',
+    topics:{maths:'Data Interpretation, Full Maths Revision', reasoning:'Full Reasoning Revision', english:'Vocabulary Intensive', gk:'Science - Chemistry, Science - Biology'}},
+  { phase:'Mock & Revise', weeks:'13–16', color:'#D85A30',
+    topics:{maths:'Mock Tests + Weak Topic Revision', reasoning:'Mock Tests + Weak Topic Revision', english:'Mock Tests + Vocabulary', gk:'Current Affairs Intensive, All Static Revision'}},
+  { phase:'Mock & Revise', weeks:'13–16', color:'#D85A30',
+    topics:{maths:'Previous Year Papers', reasoning:'Previous Year Papers', english:'Previous Year Papers', gk:'Final Revision, Exam Strategy'}},
+];
+
+const SYLLABUS = [
+  { subject: 'Maths', color: '#BA7517', badge:'pill-amber',
+    topics: ['Number System & LCM/HCF','Percentage','Profit & Loss','Simple & Compound Interest','Ratio & Proportion','Time, Speed & Distance','Time & Work & Pipes','Algebra & Linear Equations','Geometry Basics & Mensuration','Trigonometry','Data Interpretation','Averages & Mixtures']},
+  { subject: 'Reasoning', color: '#a78bfa', badge:'pill-purple',
+    topics: ['Analogies (Word/Number/Letter)','Number & Letter Series','Coding-Decoding','Blood Relations','Directions & Distance','Seating Arrangements (Linear/Circular)','Syllogism','Puzzles','Venn Diagrams','Matrix & Word Formation','Classification (Odd One Out)','Mixed Reasoning PYQs']},
+  { subject: 'English', color: '#60a5fa', badge:'pill-blue',
+    topics: ['Reading Comprehension','Spelling Correction','Fill in the Blanks','Error Detection','Phrases & Idioms','One Word Substitution','Synonyms & Antonyms','Active & Passive Voice','Direct & Indirect Speech','Para Jumbles']},
+  { subject: 'General Awareness', color: '#4ade80', badge:'pill-green',
+    topics: ['Ancient Indian History','Medieval Indian History','Modern Indian History','Indian Polity & Constitution','Indian & World Geography','Indian Economy & Banking','Science - Physics','Science - Chemistry','Science - Biology','Current Affairs (6 months)','Sports & Awards','Government Schemes']},
+  { subject: 'Skill Test', color: '#2dd4bf', badge:'pill-teal',
+    topics: ['Typing Speed (8000 key/hr)','Typing Accuracy (95%+)','MS Word Basics & Shortcuts','MS Excel Basics','Computer Fundamentals','Internet & Email Basics']},
+];
+
+const WEEKDAY_TASKS = [
+  { group:'🏋️ Morning Fitness', color:'#2dd4bf', tasks:[
+    { id:'workout', text:'Home Workout / Calisthenics', time:'5:15–6:30 AM', badge:'pill-teal' },
+  ]},
+  { group:'📚 Morning Study', color:'#fbbf24', tasks:[
+    { id:'typing-am', text:'Typing Practice', time:'6:30–7:00 AM', badge:'pill-blue' },
+    { id:'maths', text:'Maths Practice', time:'7:00–8:00 AM', badge:'pill-amber' },
+    { id:'current-affairs', text:'Current Affairs Reading', time:'8:00–8:30 AM', badge:'pill-green' },
+    { id:'reasoning', text:'Reasoning Practice', time:'8:30–9:30 AM', badge:'pill-purple' },
+  ]},
+  { group:'📖 Evening Study', color:'#60a5fa', tasks:[
+    { id:'english', text:'English Practice', time:'6:00–7:00 PM', badge:'pill-blue' },
+    { id:'gk', text:'General Awareness Topic', time:'7:00–8:00 PM', badge:'pill-green' },
+    { id:'practice-qs', text:'20 Practice Questions', time:'8:00–8:30 PM', badge:'pill-purple' },
+  ]},
+];
+
+const WEEKEND_TASKS = [
+  { group:'🏋️ Morning Fitness', color:'#2dd4bf', tasks:[
+    { id:'workout', text:'Home Workout / Calisthenics', time:'5:15–6:30 AM', badge:'pill-teal' },
+  ]},
+  { group:'📚 Morning Study', color:'#fbbf24', tasks:[
+    { id:'typing-am', text:'Typing Practice', time:'7:00–7:30 AM', badge:'pill-blue' },
+    { id:'maths-deep', text:'Maths Deep Practice (2 topics)', time:'7:30–9:30 AM', badge:'pill-amber' },
+    { id:'reasoning-weekend', text:'Reasoning (1 topic + 30 Qs)', time:'9:30–11:00 AM', badge:'pill-purple' },
+  ]},
+  { group:'📝 Afternoon Mock', color:'#f87171', tasks:[
+    { id:'mock-test', text:'Full Mock Test (all 4 subjects)', time:'3:00–5:00 PM', badge:'pill-red' },
+    { id:'mock-analysis', text:'Mock Analysis — review every wrong Q', time:'5:00–6:00 PM', badge:'pill-green' },
+  ]},
+];
+
+// ============================================================
+// STATE
+// ============================================================
+function load(key, def) { try { return JSON.parse(localStorage.getItem(key)) ?? def; } catch { return def; } }
+function save(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+const S = {
+  checks: load('checks', {}),       // { 'YYYY-MM-DD': { taskId: bool } }
+  typing: load('typing', []),        // [{date, wpm, acc}]
+  mocks:  load('mocks', []),         // [{date, score, math, reason, eng, gk, num}]
+  bestStreak: load('bestStreak', 0),
+};
+
+function todayKey() { return new Date().toISOString().slice(0,10); }
+function isWeekend(d) { const day = (d||new Date()).getDay(); return day===0||day===6; }
+
+function getTodayChecks() {
+  const k = todayKey();
+  if (!S.checks[k]) { S.checks[k] = {}; save('checks', S.checks); }
+  return S.checks[k];
+}
+
+// ============================================================
+// CHECKLIST RENDER
+// ============================================================
+function buildChecklist() {
+  const c = document.getElementById('checklist-container');
+  const tasks = isWeekend() ? WEEKEND_TASKS : WEEKDAY_TASKS;
+  const checks = getTodayChecks();
+  let html = '';
+  tasks.forEach(g => {
+    html += `<div class="task-group">
+      <div class="task-group-title"><span class="task-dot" style="background:${g.color}"></span>${g.group}</div>`;
+    g.tasks.forEach(t => {
+      const done = !!checks[t.id];
+      html += `<div class="task-item${done?' done':''}" id="ti-${t.id}" onclick="toggleTask('${t.id}')">
+        <div class="checkbox"><span class="check-icon">✓</span></div>
+        <span class="task-text">${t.text}</span>
+        <span class="task-time">${t.time}</span>
+        <span class="task-badge ${t.badge}">${t.badge.replace('pill-','').replace('blue','English').replace('amber','Maths').replace('purple','Reasoning').replace('green','GK').replace('teal','Fitness').replace('red','Mock')}</span>
+      </div>`;
+    });
+    html += '</div>';
+  });
+  c.innerHTML = html;
+  updateTodayStats();
+}
+
+function toggleTask(id) {
+  const k = todayKey();
+  if (!S.checks[k]) S.checks[k] = {};
+  S.checks[k][id] = !S.checks[k][id];
+  save('checks', S.checks);
+  const el = document.getElementById('ti-'+id);
+  if (el) el.classList.toggle('done', S.checks[k][id]);
+  updateTodayStats();
+  calcStreak();
+  if (S.checks[k][id]) toast('✅ Task marked done!');
+}
+
+function updateTodayStats() {
+  const tasks = isWeekend() ? WEEKEND_TASKS : WEEKDAY_TASKS;
+  const allTasks = tasks.flatMap(g => g.tasks);
+  const checks = getTodayChecks();
+  const done = allTasks.filter(t => checks[t.id]).length;
+  const total = allTasks.length;
+  document.getElementById('today-done').textContent = done;
+  document.getElementById('today-total').textContent = total;
+  document.getElementById('today-pct').textContent = total ? Math.round(done/total*100)+'%' : '0%';
+  document.getElementById('today-type').textContent = isWeekend() ? 'Weekend' : 'Weekday';
+}
+
+// ============================================================
+// DATE / CALENDAR
+// ============================================================
+function setDateHeaders() {
+  const d = new Date();
+  const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+  document.getElementById('today-date').textContent = d.toLocaleDateString('en-IN', opts);
+  document.getElementById('cal-month').textContent = d.toLocaleDateString('en-IN', {month:'long', year:'numeric'});
+}
+
+function buildMonthCal() {
+  const now = new Date();
+  const yr = now.getFullYear(), mo = now.getMonth();
+  const first = new Date(yr, mo, 1).getDay();
+  const days = new Date(yr, mo+1, 0).getDate();
+  const todayStr = todayKey();
+
+  let html = '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:8px">';
+  ['S','M','T','W','T','F','S'].forEach(d => {
+    html += `<div style="text-align:center;font-size:10px;color:var(--text3);padding:4px">${d}</div>`;
+  });
+  html += '</div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px">';
+  for (let i=0;i<first;i++) html += '<div></div>';
+  for (let d=1;d<=days;d++) {
+    const dStr = `${yr}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const chk = S.checks[dStr] || {};
+    const tasks = isWeekend(new Date(yr,mo,d)) ? WEEKEND_TASKS : WEEKDAY_TASKS;
+    const total = tasks.flatMap(g=>g.tasks).length;
+    const done = Object.values(chk).filter(Boolean).length;
+    const isToday = dStr === todayStr;
+    const cls = done===total&&total>0?'complete':done>0?'partial':'';
+    html += `<div class="day-chip ${cls}${isToday?' today':''}" title="${dStr}">
+      <span class="day-num">${d}</span>
+    </div>`;
+  }
+  html += '</div>';
+  html += '<div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">';
+  html += '<span style="font-size:11px;color:var(--text3)"><span style="color:var(--green)">■</span> Full day done</span>';
+  html += '<span style="font-size:11px;color:var(--text3)"><span style="color:#fbbf24">■</span> Partial</span>';
+  html += '<span style="font-size:11px;color:var(--text3)"><span style="color:var(--border2)">■</span> Not started</span>';
+  html += '</div>';
+  document.getElementById('month-cal').innerHTML = html;
+}
+
+function buildPhasebar() {
+  const phases = [
+    {label:'Foundation',weeks:'Wk 1–4',color:'#378ADD'},
+    {label:'Intermediate',weeks:'Wk 5–8',color:'#1D9E75'},
+    {label:'Advanced',weeks:'Wk 9–12',color:'#BA7517'},
+    {label:'Mock & Revise',weeks:'Wk 13–16',color:'#D85A30'},
+  ];
+  const html = phases.map((p,i) =>
+    `<div class="phase-seg" onclick="showPhaseDetail(${i})" style="border-color:${p.color}22">
+      <div class="phase-seg-label">${p.label}</div>
+      <div class="phase-seg-weeks">${p.weeks}</div>
+    </div>`
+  ).join('');
+  document.getElementById('phase-bar').innerHTML = html;
+}
+
+function showPhaseDetail(i) {
+  const details = [
+    `<strong>Foundation (Weeks 1–4)</strong><br>Build your base. Learn all core concepts from scratch.<br><br>
+    <span class="pill pill-amber">Maths</span> Number System, Percentage, Profit & Loss, SI/CI, Ratio & Proportion<br><br>
+    <span class="pill pill-purple">Reasoning</span> Analogies, Series, Coding-Decoding, Blood Relations<br><br>
+    <span class="pill pill-blue">English</span> Synonyms/Antonyms, Fill in Blanks, Spelling, Error Detection<br><br>
+    <span class="pill pill-green">GK</span> Ancient, Medieval, Modern History + Polity Part 1`,
+
+    `<strong>Intermediate (Weeks 5–8)</strong><br>Complete remaining topics. Increase practice quantity.<br><br>
+    <span class="pill pill-amber">Maths</span> Time-Speed-Distance, Time & Work, Algebra, Geometry<br><br>
+    <span class="pill pill-purple">Reasoning</span> Seating Arrangement, Syllogism, Puzzles, Venn Diagrams<br><br>
+    <span class="pill pill-blue">English</span> Idioms, One Word Sub, Active/Passive, Direct/Indirect, Para Jumbles<br><br>
+    <span class="pill pill-green">GK</span> Polity Part 2, Geography, Economy, Banking`,
+
+    `<strong>Advanced (Weeks 9–12)</strong><br>Complete all syllabus. Begin mock tests. Analyze every wrong answer.<br><br>
+    <span class="pill pill-amber">Maths</span> Mensuration, Trigonometry, Data Interpretation — full revision<br><br>
+    <span class="pill pill-purple">Reasoning</span> PYQs, full revision of all topics<br><br>
+    <span class="pill pill-blue">English</span> Full revision, vocabulary intensive<br><br>
+    <span class="pill pill-green">GK</span> Science (Physics/Chemistry/Biology), Current Affairs intensive`,
+
+    `<strong>Mock & Revise (Weeks 13–16)</strong><br>NO new topics. Only revision, mocks, and previous year papers.<br><br>
+    🎯 Give 2 full mocks per week<br>
+    🔍 Analyze every mock deeply — weak spots = priority<br>
+    ⌨️ Typing target 8000+ key/hr — daily practice<br>
+    📋 Solve 2 previous year papers under exam conditions<br>
+    📰 Current Affairs daily — 15 min every morning`,
+  ];
+  document.querySelectorAll('.phase-seg').forEach((el,j) => {
+    el.classList.toggle('current', j===i);
+  });
+  document.getElementById('week-detail').innerHTML = `<div style="padding:16px;background:var(--bg3);border-radius:var(--r2);line-height:1.8">${details[i]}</div>`;
+}
+
+// ============================================================
+// SYLLABUS PAGE
+// ============================================================
+function buildSyllabus() {
+  const c = document.getElementById('syllabus-container');
+  let html = '';
+  SYLLABUS.forEach(s => {
+    const topicChecks = load('syl_'+s.subject, {});
+    const done = Object.values(topicChecks).filter(Boolean).length;
+    html += `<div class="card">
+      <div class="card-title" style="color:${s.color}">${s.subject} — ${done}/${s.topics.length} topics</div>
+      <div class="prog-wrap" style="margin-bottom:14px">
+        <div class="prog-track"><div class="prog-fill" style="background:${s.color};width:${Math.round(done/s.topics.length*100)}%"></div></div>
+      </div>`;
+    s.topics.forEach((t,i) => {
+      const done2 = !!topicChecks[i];
+      html += `<div class="task-item${done2?' done':''}" onclick="toggleSyl('${s.subject}',${i},this)">
+        <div class="checkbox"><span class="check-icon">✓</span></div>
+        <span class="task-text">${t}</span>
+        <span class="task-badge ${s.badge}">${s.subject}</span>
+      </div>`;
+    });
+    html += '</div>';
+  });
+  c.innerHTML = html;
+}
+
+function toggleSyl(subj, idx, el) {
+  const k = 'syl_'+subj;
+  const d = load(k, {});
+  d[idx] = !d[idx];
+  save(k, d);
+  el.classList.toggle('done', d[idx]);
+  if (d[idx]) toast('Topic marked complete! 🎓');
+  buildSyllabus();
+}
+
+// ============================================================
+// TYPING LOG
+// ============================================================
+function saveTyping() {
+  const wpm = parseInt(document.getElementById('wpm-input').value);
+  const acc = parseInt(document.getElementById('acc-input').value);
+  if (!wpm || !acc) { toast('Enter WPM and Accuracy!'); return; }
+  S.typing.unshift({ date: todayKey(), wpm, acc });
+  save('typing', S.typing);
+  document.getElementById('wpm-input').value = '';
+  document.getElementById('acc-input').value = '';
+  renderTyping();
+  toast('⌨️ Speed logged! Keep it up!');
+}
+
+function renderTyping() {
+  if (!S.typing.length) return;
+  const best = Math.max(...S.typing.map(t=>t.wpm));
+  const avg = Math.round(S.typing.reduce((a,t)=>a+t.wpm,0)/S.typing.length);
+  document.getElementById('best-wpm').textContent = best;
+  document.getElementById('avg-wpm').textContent = avg;
+  const pct = Math.min(100, Math.round(avg/35*100));
+  document.getElementById('wpm-prog-pct').textContent = pct+'%';
+  document.getElementById('wpm-prog-bar').style.width = pct+'%';
+
+  const list = document.getElementById('typing-log-list');
+  list.innerHTML = S.typing.slice(0,15).map(t => {
+    const pct2 = Math.min(100, Math.round(t.wpm/50*100));
+    const col = t.wpm>=35?'var(--green)':t.wpm>=25?'var(--accent)':'var(--red)';
+    return `<div class="typing-entry">
+      <span class="wpm-big" style="color:${col}">${t.wpm}</span>
+      <span style="font-size:11px;color:var(--text3)">WPM</span>
+      <div style="flex:1;margin:0 12px">
+        <div class="prog-track"><div class="prog-fill" style="background:${col};width:${pct2}%"></div></div>
+        <div style="font-size:10px;color:var(--text3);margin-top:3px">Accuracy: ${t.acc}%</div>
+      </div>
+      <span class="score-date">${t.date}</span>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// MOCK SCORES
+// ============================================================
+function saveMock() {
+  const score = parseInt(document.getElementById('mock-score').value);
+  const num = parseInt(document.getElementById('mock-num').value)||S.mocks.length+1;
+  if (!score) { toast('Enter a score!'); return; }
+  const entry = {
+    date: todayKey(), num, score,
+    math: parseInt(document.getElementById('mock-math').value)||0,
+    reason: parseInt(document.getElementById('mock-reason').value)||0,
+    eng: parseInt(document.getElementById('mock-eng').value)||0,
+    gk: parseInt(document.getElementById('mock-gk').value)||0,
+  };
+  S.mocks.unshift(entry);
+  save('mocks', S.mocks);
+  ['mock-num','mock-score','mock-math','mock-reason','mock-eng','mock-gk'].forEach(id => document.getElementById(id).value='');
+  renderMocks();
+  toast('📝 Mock score saved!');
+}
+
+function renderMocks() {
+  if (!S.mocks.length) return;
+  const best = Math.max(...S.mocks.map(m=>m.score));
+  const avg = Math.round(S.mocks.reduce((a,m)=>a+m.score,0)/S.mocks.length);
+  document.getElementById('best-mock').textContent = best;
+  document.getElementById('avg-mock').textContent = avg;
+
+  // Subject averages
+  const subjects = [{key:'math',label:'Maths',max:25,col:'var(--accent)'},{key:'reason',label:'Reasoning',max:25,col:'var(--purple)'},{key:'eng',label:'English',max:25,col:'var(--blue)'},{key:'gk',label:'GK',max:25,col:'var(--green)'}];
+  let saHtml = '';
+  subjects.forEach(s => {
+    const a = Math.round(S.mocks.reduce((x,m)=>x+(m[s.key]||0),0)/S.mocks.length);
+    const pct = Math.round(a/s.max*100);
+    saHtml += `<div class="prog-wrap">
+      <div class="prog-label"><span>${s.label}</span><span style="color:${s.col}">${a}/${s.max}</span></div>
+      <div class="prog-track"><div class="prog-fill" style="background:${s.col};width:${pct}%"></div></div>
+    </div>`;
+  });
+  document.getElementById('subj-avgs').innerHTML = saHtml;
+
+  const list = document.getElementById('mock-log-list');
+  list.innerHTML = S.mocks.slice(0,10).map(m => {
+    const col = m.score>=80?'var(--green)':m.score>=60?'var(--accent)':'var(--red)';
+    const pct = Math.round(m.score);
+    return `<div class="score-row">
+      <span class="score-date">${m.date}</span>
+      <span style="font-size:11px;color:var(--text3);min-width:50px">Mock #${m.num}</span>
+      <span class="score-val" style="color:${col}">${m.score}</span>
+      <div class="score-bar"><div class="score-bar-fill" style="background:${col};width:${pct}%"></div></div>
+      <span style="font-size:11px;color:var(--text3)">M:${m.math} R:${m.reason} E:${m.eng} G:${m.gk}</span>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// PROGRESS PAGE
+// ============================================================
+function renderProgress() {
+  const allDays = Object.keys(S.checks);
+  const studiedDays = allDays.filter(d => {
+    return Object.values(S.checks[d]).some(Boolean);
+  });
+  document.getElementById('p-days').textContent = studiedDays.length;
+  document.getElementById('p-tasks').textContent = allDays.reduce((a,d) => a + Object.values(S.checks[d]).filter(Boolean).length, 0);
+  document.getElementById('p-mocks').textContent = S.mocks.length;
+  document.getElementById('p-streak').textContent = S.bestStreak;
+
+  // Subject progress from today's checks across all days
+  const subjMap = {maths:'Maths',reasoning:'Reasoning',english:'English',gk:'GK','typing-am':'Typing','current-affairs':'GK','maths-deep':'Maths','reasoning-weekend':'Reasoning','mock-test':'Mock','practice-qs':'Mixed','gk':'GK'};
+  const subjCount = {Maths:0,Reasoning:0,English:0,GK:0,Typing:0};
+  const subjTotal = {Maths:0,Reasoning:0,English:0,GK:0,Typing:0};
+  allDays.forEach(d => {
+    const chk = S.checks[d];
+    Object.keys(chk).forEach(id => {
+      const s = subjMap[id];
+      if (s && subjTotal[s]!==undefined) {
+        subjTotal[s]++;
+        if (chk[id]) subjCount[s]++;
+      }
+    });
+  });
+  const colors = {Maths:'var(--accent)',Reasoning:'var(--purple)',English:'var(--blue)',GK:'var(--green)',Typing:'var(--teal)'};
+  let spHtml = '';
+  Object.keys(subjCount).forEach(s => {
+    const total = subjTotal[s]||1;
+    const pct = Math.round(subjCount[s]/total*100)||0;
+    spHtml += `<div class="prog-wrap">
+      <div class="prog-label"><span>${s}</span><span>${subjCount[s]}/${total} sessions</span></div>
+      <div class="prog-track"><div class="prog-fill" style="background:${colors[s]};width:${pct}%"></div></div>
+    </div>`;
+  });
+  document.getElementById('subj-progress').innerHTML = spHtml||'<p style="color:var(--text3);font-size:13px">Start tracking to see progress!</p>';
+
+  // Syllabus completion
+  let sylHtml = '';
+  SYLLABUS.forEach(s => {
+    const d = load('syl_'+s.subject,{});
+    const done = Object.values(d).filter(Boolean).length;
+    const pct = Math.round(done/s.topics.length*100);
+    const colors2 = {Maths:'var(--accent)',Reasoning:'var(--purple)',English:'var(--blue)','General Awareness':'var(--green)','Skill Test':'var(--teal)'};
+    sylHtml += `<div class="prog-wrap">
+      <div class="prog-label"><span>${s.subject}</span><span>${done}/${s.topics.length} topics (${pct}%)</span></div>
+      <div class="prog-track"><div class="prog-fill" style="background:${colors2[s.subject]||'var(--accent)'};width:${pct}%"></div></div>
+    </div>`;
+  });
+  document.getElementById('syllabus-progress').innerHTML = sylHtml;
+}
+
+// ============================================================
+// STREAK
+// ============================================================
+function calcStreak() {
+  let streak = 0;
+  const d = new Date();
+  while (true) {
+    const k = d.toISOString().slice(0,10);
+    const chk = S.checks[k] || {};
+    const tasks = isWeekend(d) ? WEEKEND_TASKS : WEEKDAY_TASKS;
+    const total = tasks.flatMap(g=>g.tasks).length;
+    const done = Object.values(chk).filter(Boolean).length;
+    if (done === 0) break;
+    streak++;
+    d.setDate(d.getDate()-1);
+    if (streak > 365) break;
+  }
+  if (streak > S.bestStreak) { S.bestStreak = streak; save('bestStreak', streak); }
+  document.getElementById('streak-num').textContent = streak;
+  document.getElementById('p-streak').textContent = S.bestStreak;
+}
+
+// ============================================================
+// NAV
+// ============================================================
+function goTo(page, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (page==='calendar') { buildMonthCal(); buildPhasebar(); }
+  if (page==='syllabus') buildSyllabus();
+  if (page==='typing') renderTyping();
+  if (page==='mocks') renderMocks();
+  if (page==='progress') renderProgress();
+  if (window.innerWidth < 768) toggleMenu();
+}
+
+function toggleMenu() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  setDateHeaders();
+  buildChecklist();
+  calcStreak();
+}
+
+init();
+</script>
+</body>
+</html>
